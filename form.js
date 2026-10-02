@@ -71,7 +71,7 @@ function validateField(input) {
 
   if (input.required && !value) message = 'Ce champ est obligatoire.';
   else if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) message = 'Saisissez une adresse e-mail valide.';
-  else if (input.type === 'tel' && !/^[+\d][\d\s().-]{7,19}$/.test(value)) message = 'Saisissez un numéro de téléphone valide.';
+  else if (input.type === 'tel' && !/^[+\d][\d\s().-]{7,19}$/.test(value)) message = 'Saisissez un numéro de téléphone valide..';
 
   field.classList.toggle('invalid', Boolean(message));
   error.textContent = message;
