@@ -30,6 +30,14 @@ function prepareInvitation(values) {
   return { fullName, reference };
 }
 
+function showSuccessInvitation(values) {
+  prepareInvitation(values);
+  formView.hidden = true;
+  pageShell.classList.add('ticket-mode');
+  successBox.classList.add('show');
+  successBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 async function renderInvitationCanvas() {
   if (!window.html2canvas) throw new Error('Le module de création d’image est indisponible.');
   await document.fonts?.ready;
@@ -116,11 +124,7 @@ form.addEventListener('submit', async event => {
       .insert(payload);
     if (error) throw error;
     successName.textContent = values.prenom;
-    prepareInvitation(values);
-    formView.hidden = true;
-    pageShell.classList.add('ticket-mode');
-    successBox.classList.add('show');
-    successBox.scrollTop = 0;
+    showSuccessInvitation(values);
   } catch (error) {
     console.error(error);
     alert("L’inscription n’a pas pu être enregistrée. Vérifiez votre connexion ou la configuration Supabase.");
