@@ -93,18 +93,34 @@ function showToast(message) {
 
 async function loadInscriptions() {
   $('#resultLabel').textContent = 'Chargement des candidatures…';
-  const { data, error } = await window.supabaseDb
-    .from('inscriptions')
-    .select('*')
-    .order('date_inscription', { ascending: false });
 
-  if (error) {
+  try {
+    const allRows = [];
+    let from = 0;
+    const pageSize = 1000;
+
+    while (true) {
+      const { data, error } = await window.supabaseDb
+        .from('inscriptions')
+        .select('*')
+        .order('date_inscription', { ascending: false })
+        .range(from, from + pageSize - 1);
+
+      if (error) throw error;
+
+      const rows = data || [];
+      allRows.push(...rows);
+
+      if (rows.length < pageSize) break;
+      from += pageSize;
+    }
+
+    inscriptions = allRows.map(mapRow);
+    render();
+  } catch (error) {
     console.error(error);
     showToast('Impossible de charger les inscriptions');
-    return;
   }
-  inscriptions = (data || []).map(mapRow);
-  render();
 }
 
 async function cycleStatus(item) {
